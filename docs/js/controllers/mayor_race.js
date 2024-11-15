@@ -5,6 +5,8 @@ class MayorMarginRaceLayer {
             registered_voters: "registered_voters",
             casted_ballots: "casted_ballots",
             marginValue: "margin_of_win",
+            year: "2018",
+            turnout_percentage: "turnout_percentage",
         }
 
         if (layer_options)
@@ -31,6 +33,7 @@ class MayorSwingYoYLayer {
     constructor(data, layer_options) {
         this.layer_options = {
             pk: "ELECD_CODE",
+            swingField: ["2018_margin_of_win","2022_margin_of_win"],
         }
 
         if (layer_options)

@@ -7,8 +7,20 @@ class MainApplication {
         this.map = this.build_map()
         this.osmLayer = new L.TileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}');
 
-        this.ewing_mayor_race__2022 = new MayorMarginRaceLayer(electionMayor2022Data);
-        this.ewing_mayor_race__2018 = new MayorMarginRaceLayer(electionMayor2018Data);
+        this.ewing_mayor_race__2022 = new MayorMarginRaceLayer(electionMayorData, {
+            registered_voters: "2022_registered_voters",
+            casted_ballots: "2022_casted_ballots",
+            marginValue: "2022_margin_of_win",
+            turnout_percentage: "2022_turnout",
+            year: "2022"
+        });
+        this.ewing_mayor_race__2018 = new MayorMarginRaceLayer(electionMayorData,{
+            registered_voters: "2018_registered_voters",
+            casted_ballots: "2018_casted_ballots",
+            marginValue: "2018_margin_of_win",
+            turnout_percentage: "2018_turnout",
+            year: "2018"
+        });
         this.ewing_mayor_race_2018_2022_swing = new MayorSwingYoYLayer(electionMayor2022_2018_MarginSwingData);
         this.header_text = new HeaderText()
         this.current_layer = this.ewing_mayor_race__2022;

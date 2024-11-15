@@ -4,8 +4,8 @@ class ElectionMarginLayer {
         this.options = options;
     }
 
-    getVoteKeys(dataSet) {
-        return Object.keys(dataSet).filter(key => key.endsWith('_votes'));
+    getVoteKeys(dataSet, year_key) {
+        return Object.keys(dataSet).filter(key => key.endsWith('_votes') && key.startsWith(year_key));
     }
 
     getMarginInfo(dataSet, voteKeys) {
@@ -23,7 +23,7 @@ class ElectionMarginLayer {
         );
 
         // Construct the marginInfo based on the maximum vote key
-        var marginInfo = `${maxVoteKey.replace('_votes', '').toUpperCase()} +${dataSet[this.options.marginValue]}`;
+        var marginInfo = `${maxVoteKey.replace('_votes', '').replace(this.options.year+'_','').toUpperCase()} +${dataSet[this.options.marginValue]}`;
 
         var marginInfoColor = '';
         if (maxVoteKey.includes('dem')) {
@@ -45,11 +45,10 @@ class ElectionMarginLayer {
         candidates,
         registeredVoters,
         castedBallots,
+        turnoutPercentage,
         marginInfo,
         marginInfoColor
     }) {
-        const turnoutPercentage = ((castedBallots / registeredVoters) * 100).toFixed(1);
-
         const resultsTableHTML = `
             <div class="results-table">
               <div class="results-header">${districtName}</div>
@@ -102,10 +101,9 @@ class ElectionMarginLayer {
     _onEachFeature(feature, layer) {
         var dataSet = this.electionData.getGroupedByPKey()
         var key = feature.properties[this.options.pk]
-
         var this_data = dataSet[key][0];
-
-        var voteKeys = this.getVoteKeys(this_data);
+        var year_key = this.options.year +"_";
+        var voteKeys = this.getVoteKeys(this_data, year_key);
 
         layer.setStyle({
             color: Utils.getColor(parseInt(this_data[this.options.marginValue]), Constants.marginScaleGradient),
@@ -120,12 +118,13 @@ class ElectionMarginLayer {
         });
 
         // Dynamically create candidates based on dataSet from ElectionData
-        const candidates = this.electionData.getCandidates().map(candidate => ({
+        const candidates = this.electionData.getCandidates().map(candidate => (
+            {
             name: candidate.name,
-            votes: this_data[candidate.dataKey + "_votes"],
-            percentage: this_data[candidate.dataKey + "_percent"],
+            votes: this_data[year_key+candidate.dataKey + "_votes"],
+            percentage: this_data[year_key+candidate.dataKey + "_percent"],
             party: candidate.party,
-            isWinner: Utils.checkAgainstMultipleKeys(this_data[candidate.dataKey + "_votes"], this_data, voteKeys),
+            isWinner: Utils.checkAgainstMultipleKeys(this_data[year_key+candidate.dataKey + "_votes"], this_data, voteKeys),
             handler: () => alert(`Displaying details for ${candidate.name}`)
         }));
 
@@ -139,6 +138,7 @@ class ElectionMarginLayer {
             candidates,
             registeredVoters: this_data[this.options.registered_voters],
             castedBallots: this_data[this.options.casted_ballots],
+            turnoutPercentage: this_data[this.options.turnout_percentage],
             marginInfo: marginInfo,
             marginInfoColor: marginInfoColor
         };

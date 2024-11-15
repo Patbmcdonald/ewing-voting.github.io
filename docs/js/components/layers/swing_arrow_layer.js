@@ -33,9 +33,9 @@ class SwingArrowLayer {
               <div class="results-header">${districtName}</div>
           
               <div class="table-header">
-                  <div class="candidate-name">Election Year</div>
+                  <div class="candidate-name"></div>
                   <div class="vote-count"></div>
-                  <div class="percentage">%</div>
+                  <div class="percentage">Margin</div>
               </div>
           
               ${candidates.map((candidate, index) => `
@@ -73,6 +73,11 @@ class SwingArrowLayer {
 
         var dataSet = this.electionData.getGroupedByPKey()
         var this_data = dataSet[feature.properties[this.options.pk]][0]
+        var data_set_margin = Number.parseFloat(this_data[this.options.swingField[1]] - this_data[this.options.swingField[0]]).toFixed(2);
+        
+        this_data["__margin__"] = data_set_margin;
+        
+        
         layer.bindTooltip(feature.properties[this.options.pk], {
             permanent: true,
             direction: "center",
@@ -86,7 +91,7 @@ class SwingArrowLayer {
         });
 
         layer.setStyle({
-            color: Utils.getColor(parseInt(this_data["swing_results"]), Constants.marginScaleGradient),
+            color: Utils.getColor(parseInt(data_set_margin), Constants.marginScaleGradient),
             weight: 1,
             fillOpacity: 0.20
         });
@@ -95,7 +100,7 @@ class SwingArrowLayer {
         
         for (let i = 0; i < 20; i++) {
             const randomPoint = this._generateRandomPoint(feature);
-            var districtSwing = parseFloat(this_data["swing_results"]) * 10;
+            var districtSwing = parseFloat(data_set_margin) * 10;
             var angle = 45;
             if (districtSwing > 0)
                 angle = 320;
@@ -117,8 +122,8 @@ class SwingArrowLayer {
             name: candidate.name,
             percentage: (this_data[candidate.dataKey] > 0.0 ? "D +"+this_data[candidate.dataKey] : "R +"+this_data[candidate.dataKey] * -1),
             party: candidate.party,
-            cssClass: (candidate.name == 'Party Swing' ? ((this_data[candidate.dataKey] > 0) ?  "democrat": "republican") : ""),
-            rowCssClass : (candidate.name == 'Party Swing' ? "winner_row": ""),
+            cssClass: (candidate.dataKey == '__margin__' ? ((this_data[candidate.dataKey] > 0) ?  "democrat": "republican") : ""),
+            rowCssClass : (candidate.dataKey == '__margin__' ? "winner_row": ""),
         }));
 
         const tableOptions = {

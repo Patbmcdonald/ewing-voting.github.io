@@ -5,7 +5,6 @@ class ElectionData {
         this.candidateOptions = candidateOptions;
     }
 
-    // Method to dynamically map candidates to the data, handling multiple candidates per party
     getCandidates() {
         return this.candidateOptions
     }

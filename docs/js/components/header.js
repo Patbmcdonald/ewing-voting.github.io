@@ -3,7 +3,7 @@ class HeaderText {
         this.text = ""
     }
 
-    setText(text){
+    setText(text) {
         this.text = text;
         this.render()
     }
@@ -11,9 +11,7 @@ class HeaderText {
     render() {
         var titleElement = document.getElementById('mapTitle');
         console.log("titleElement", titleElement)
-        if (titleElement) 
+        if (titleElement)
             titleElement.textContent = this.text;
     }
 }
-
-// Usage

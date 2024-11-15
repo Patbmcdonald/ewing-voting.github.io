@@ -1,4 +1,3 @@
-// Define a custom Leaflet control for the sidebar and legend with dynamic click handling from options
 L.Control.SidebarLegend = L.Control.extend({
     options: {
         position: 'topright', // Position the control in the top-right corner
@@ -29,19 +28,18 @@ L.Control.SidebarLegend = L.Control.extend({
         const container = L.DomUtil.create('div', 'leaflet-top leaflet-right');
         container.innerHTML = this._createLegendHTML(this.options);
 
-        // Add click event listener to handle dynamic item clicks
         this._addClickEvents(container);
 
-        // Prevent click propagation to map
         L.DomEvent.disableClickPropagation(container);
         return container;
     },
 
+    //  <label class="leaflet-panel-layers-title"><span>${options.title}</span></label>
+       
     _createLegendHTML: function (options) {
         let html = `
         <div class="leaflet-panel-layers compact expanded leaflet-control leaflet-control-layers-expanded" style="width:175px" aria-haspopup="true">
-          <label class="leaflet-panel-layers-title"><span>${options.title}</span></label>
-          <div class="leaflet-panel-layers-separator"></div>
+            <div class="leaflet-panel-layers-separator"></div>
           <form class="leaflet-panel-layers-list" style="max-height: 374px;">
             <div class="leaflet-panel-layers-base">
       `;

@@ -14,11 +14,13 @@ class LegendControl {
 
     generateLegendHTML() {
         return this.thresholds.map((threshold, index) => {
+            const label = threshold < 0 ? threshold * -1 : threshold
+
             const color = Utils.getColor(threshold + 1, Constants.marginScaleGradient);
             const nextThreshold = this.thresholds[index + 1];
             return `
                 <i style="background:${color}"></i> 
-                ${threshold}${nextThreshold ? `<br>` : ''}
+                ${label}${nextThreshold ? `<br>` : ''}
             `;
         }).join('');
     }
