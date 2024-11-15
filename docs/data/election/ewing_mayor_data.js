@@ -1,39 +1,3 @@
-const electionMayorData = new ElectionData("county", mayor_data, [{
-        party: "Democrat",
-        cssClass: "democrat",
-        name: "Bert H. Steinmann",
-        dataKey: "dem",
-    },
-    {
-        party: "Republican",
-        cssClass: "republican",
-        name: "Ronald Prykanowski",
-        dataKey: "rep",
-    },
-]);
-
-
-const electionMayor2022_2018_MarginSwingData = new ElectionData("county", mayor_data, [{
-        party: "Democrat",
-        name: "Ewing 2022 Mayor Race",
-        dataKey: "2022_margin_of_win",
-        cssClass: "",
-
-    },
-    {
-        party: "Republican",
-        name: "Ewing 2018 Mayor Race",
-        dataKey: "2018_margin_of_win",
-        cssClass: "",
-    },
-    {
-        party: "Party",
-        name: "District Swing",
-        dataKey: "__margin__",
-        cssClass: "winner",
-    }
-]);
-
 const mayor_data = [{
         "county": "01",
         "2018_registered": 658,
@@ -567,3 +531,39 @@ const mayor_data = [{
         "2022_turnout": 45.83
     }
 ]
+
+const electionMayorData = new ElectionData("county", mayor_data, [{
+        party: "Democrat",
+        cssClass: "democrat",
+        name: "Bert H. Steinmann",
+        dataKey: "dem",
+    },
+    {
+        party: "Republican",
+        cssClass: "republican",
+        name: "Ronald Prykanowski",
+        dataKey: "rep",
+    },
+]);
+
+
+const electionMayor2022_2018_MarginSwingData = new ElectionData("county", mayor_data, [{
+        party: "Democrat",
+        name: "Ewing 2022 Mayor Race",
+        dataKey: "2022_margin_of_win",
+        cssClass: "",
+
+    },
+    {
+        party: "Republican",
+        name: "Ewing 2018 Mayor Race",
+        dataKey: "2018_margin_of_win",
+        cssClass: "",
+    },
+    {
+        party: "Party",
+        name: "District Swing",
+        dataKey: "__margin__",
+        cssClass: "winner",
+    }
+]);
