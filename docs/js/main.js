@@ -15,8 +15,8 @@ class MainApplication {
             year: "2022"
         });
         this.ewing_mayor_race__2018 = new MayorMarginRaceLayer(electionMayorData,{
-            registered_voters: "2018_registered_voters",
-            casted_ballots: "2018_casted_ballots",
+            registered_voters: "2018_registered",
+            casted_ballots: "2018_casted",
             marginValue: "2018_margin_of_win",
             turnout_percentage: "2018_turnout",
             year: "2018"
