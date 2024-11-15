@@ -1,27 +1,18 @@
 class HeaderText {
-    constructor(map, options) {
-        this.map = map;
-        this.options = options;
-        this.control = L.control({ position: 'topleft' });
-        this.control.onAdd = this.onAdd.bind(this);
+    constructor() {
+        this.text = ""
     }
 
-    onAdd() {
-        const container = L.DomUtil.create('div', 'leaflet-top leaflet-right');
-        container.innerHtml = this.generateHTML();
-        console.log("Here", container);
-        return container;
+    setText(text){
+        this.text = text;
+        this.render()
     }
 
-
-    generateHTML() {
-            return `
-                <span>${this.options.html}</span> 
-            `;
-    }
-
-    addToMap() {
-        this.control.addTo(this.map);
+    render() {
+        var titleElement = document.getElementById('mapTitle');
+        console.log("titleElement", titleElement)
+        if (titleElement) 
+            titleElement.textContent = this.text;
     }
 }
 

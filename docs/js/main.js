@@ -10,7 +10,7 @@ class MainApplication {
         this.ewing_mayor_race__2022 = new MayorMarginRaceLayer(electionMayor2022Data);
         this.ewing_mayor_race__2018 = new MayorMarginRaceLayer(electionMayor2018Data);
         this.ewing_mayor_race_2018_2022_swing = new MayorSwingYoYLayer(electionMayor2022_2018_MarginSwingData);
-
+        this.header_text = new HeaderText()
         this.current_layer = this.ewing_mayor_race__2022;
         this.init();
     }
@@ -45,12 +45,8 @@ class MainApplication {
             }]
         });
 
-        const legend = new LegendControl(this.map, Constants.marginScaleThresholds).addToMap();
-        this.map_title_control = new HeaderText(this.map, {
-            "html": "Ewing Mayor Race - 2022 Results",
-            "id": "header_text",
-            "position": 'top'
-        }).addToMap();
+        new LegendControl(this.map, Constants.marginScaleThresholds).addToMap();
+        this.header_text.setText('Ewing Mayor Race - 2022 Results');
         this.render_layer(this.current_layer);
     }
 
@@ -60,12 +56,8 @@ class MainApplication {
             $this.map.removeLayer(layer);
         });
         this.map.addLayer(this.osmLayer);
-        this.map.removeControl(this.map_title_control);
-        this.map_title_control = new HeaderText(this.map,{
-            "html": title,
-            "id": "header_text",
-            "position": 'top'
-        }).addToMap();
+        
+        this.header_text.setText(title);
         this.render_layer(new_layer);
 
     }

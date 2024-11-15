@@ -126,14 +126,12 @@ body {
 .vote-count,
 .percentage {
   width: 70px;
-  /* Ensures alignment for "Votes" and "%" columns */
   text-align: right;
 }
 
 .vote-count,
 .margin-info {
   width: 70px;
-  /* Ensures alignment for "Votes" and "%" columns */
   text-align: right;
   font-weight: bold;
   font-size: 12px;
@@ -188,4 +186,17 @@ body {
 .leaflet-container a.leaflet-popup-close-button {
   top: 5px;
   right: 9px;
+}
+
+
+.map-title {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  z-index: 1000; /* Ensure the title is above the map */
+  text-align: center;
 }
