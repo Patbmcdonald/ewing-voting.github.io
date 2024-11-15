@@ -1,1 +1,0 @@
-# ewng-voting.github.io
