@@ -22,7 +22,6 @@ class MainApplication {
             year: "2018"
         });
         this.ewing_mayor_race_2018_2022_swing = new MayorSwingYoYLayer(electionMayor2022_2018_MarginSwingData);
-        this.header_text = new HeaderText()
         this.current_layer = this.ewing_mayor_race__2022;
         this.init();
     }
@@ -35,49 +34,118 @@ class MainApplication {
             groupings: [{
                     title: 'Elections',
                     groups: [{
-                        label: 'Ewing Mayor Race',
+                        label: 'Local Election Results',
                         items: [{
-                                label: '2022 Results',
+                                label: '2022 Ewing Mayor Race',
                                 value: '2022',
                                 checked: true,
-                                handler: () => $this.rerender($this.ewing_mayor_race__2022, 'Ewing Mayor Race - 2022 Results')
+                                handler: () => $this.rerender($this.ewing_mayor_race__2022)
                             },
                             {
-                                label: '2018 Results',
+                                label: '2018 Ewing Mayor Race',
                                 value: '2018',
                                 checked: false,
-                                handler: () => $this.rerender($this.ewing_mayor_race__2018, 'Ewing Mayor Race - 2018 Results')
-                            },
-                            {
-                                label: '2018-2022 District Swing',
-                                value: 'swing',
-                                checked: false,
-                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing, 'Ewing Mayor Race - 2018-2022 District Swing')
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018)
                             }
                         ]
                     }]
                 },
                 {
-                    title: 'Electionds',
+                    title: 'Elections',
                     groups: [{
-                        label: 'Ewing Mayor Racer',
+                        label: 'National Election Results',
                         items: [{
-                                label: '2025 Results',
-                                value: '2025',
-                                checked: true,
-                                handler: () => $this.rerender($this.ewing_mayor_race__2022, 'Ewing Mayor Race - 2022 Results')
+                                label: '2024 Presidental Race',
+                                value: '2024_presidental',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2022)
                             },
                             {
-                                label: '2022 Results',
-                                value: '2022',
+                                label: '2020 Presidental Race',
+                                value: '2020_presidental',
                                 checked: false,
-                                handler: () => $this.rerender($this.ewing_mayor_race__2018, 'Ewing Mayor Race - 2018 Results')
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018)
                             },
                             {
-                                label: '2018-2022 District Swing',
-                                value: 'swing',
+                                label: '2016 Presidental Race',
+                                value: '2016_presidental',
                                 checked: false,
-                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing, 'Ewing Mayor Race - 2018-2022 District Swing')
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018)
+                            }
+                        ]
+                    }]
+                },
+                {
+                    title: 'Elections',
+                    groups: [{
+                        label: 'Voter Turnout',
+                        items: [{
+                                label: '2024 Elections',
+                                value: '2024_turnout',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2022)
+                            },
+                            {
+                                label: '2022 Elections',
+                                value: '2022_turnout',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018)
+                            },
+                            {
+                                label: '2020 Elections',
+                                value: '2020_turnout',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing)
+                            }
+                        ]
+                    }]
+                },
+                {
+                    title: 'Elections',
+                    groups: [{
+                        label: 'Voter Registrations',
+                        items: [{
+                                label: '2024 Elections',
+                                value: '2024_turnout',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2022)
+                            },
+                            {
+                                label: '2022 Elections',
+                                value: '2022_turnout',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018)
+                            },
+                            {
+                                label: '2020 Elections',
+                                value: '2020_turnout',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing)
+                            }
+                        ]
+                    }]
+                },
+                {
+                    title: 'Elections',
+                    groups: [{
+                        label: 'Election Swings',
+                        items: [{
+                                label: '2024 Elections',
+                                value: '2024_election_swings',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing)
+                            },
+                            {
+                                label: '2022 Elections',
+                                value: '2022_election_swings',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing)
+                            },
+                            {
+                                label: '2020 Elections',
+                                value: '2020_election_swings',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing)
                             }
                         ]
                     }]
@@ -90,7 +158,7 @@ class MainApplication {
         this.render_layer(this.current_layer);
     }
 
-    rerender(new_layer, title) {
+    rerender(new_layer) {
         var $this = this
         this.map.eachLayer(function (layer) {
             $this.map.removeLayer(layer);

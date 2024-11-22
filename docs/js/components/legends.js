@@ -2,7 +2,7 @@ class LegendControl {
     constructor(map, thresholds) {
         this.map = map;
         this.thresholds = thresholds;
-        this.control = L.control({ position: 'bottomright' });
+        this.control = L.control({ position: 'bottomleft' });
         this.control.onAdd = this.onAdd.bind(this);
     }
 
