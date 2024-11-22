@@ -10,7 +10,6 @@ class HeaderText {
 
     render() {
         var titleElement = document.getElementById('mapTitle');
-        console.log("titleElement", titleElement)
         if (titleElement)
             titleElement.textContent = this.text;
     }

@@ -1,33 +1,19 @@
 L.Control.SidebarLegend = L.Control.extend({
-    options: {
-        position: 'topright', // Position the control in the top-right corner
-        title: 'Election Results', // Title of the sidebar/legend
-        groups: [{
-            label: 'Mayor Race',
-            items: [{
-                    label: '2022',
-                    value: '2022',
-                    checked: true,
-                    handler: () => console.log("Displaying 2022 mayor race results")
-                },
-                {
-                    label: '2018',
-                    value: '2018',
-                    checked: false,
-                    handler: () => console.log("Displaying 2018 mayor race results")
-                }
-            ]
-        }]
-    },
-
     initialize: function (options) {
+        console.log("options", this.options);
         L.setOptions(this, options);
     },
 
     onAdd: function (map) {
         const container = L.DomUtil.create('div', 'leaflet-top leaflet-right');
-        container.innerHTML = this._createLegendHTML(this.options);
+        console.log("options", this.options["groupings"]);
+        var html = '';
 
+        this.options["groupings"].forEach(group => {
+            html += this._createLegendHTML(group);
+        });
+
+        container.innerHTML = html;
         this._addClickEvents(container);
 
         L.DomEvent.disableClickPropagation(container);
@@ -35,44 +21,47 @@ L.Control.SidebarLegend = L.Control.extend({
     },
 
     //  <label class="leaflet-panel-layers-title"><span>${options.title}</span></label>
-       
-    _createLegendHTML: function (options) {
+    //             
+    _createLegendHTML: function (option) {
+        final_html = ``
         let html = `
-        <div class="leaflet-panel-layers compact expanded leaflet-control leaflet-control-layers-expanded" style="width:175px" aria-haspopup="true">
-            <div class="leaflet-panel-layers-separator"></div>
-          <form class="leaflet-panel-layers-list" style="max-height: 374px;">
-            <div class="leaflet-panel-layers-base">
-      `;
+            <div class="leaflet-panel-layers compact expanded leaflet-control leaflet-control-layers-expanded" style="width:175px" aria-haspopup="true">
 
-        options.groups.forEach(group => {
+            <form class="leaflet-panel-layers-list" style="max-height: 374px;">
+                <div class="leaflet-panel-layers-base ">`;
+
+        option.groups.forEach(group => {
             html += `
-          <div class="leaflet-panel-layers-group">
-            <label class="leaflet-panel-layers-grouplabel">
-              <span class="leaflet-panel-layers-title">${group.label}</span>
-            </label>
-        `;
+                <div class="leaflet-panel-layers-group">
+                    <label class="leaflet-panel-layers-grouplabel">
+                    <span class="leaflet-panel-layers-title">${group.label}</span>
+                    </label>
+                `;
 
+            html += `<div class="leaflet-panel-layers-border border_bottom"> </div>`;
+            console.log("group", group["items"]);
             group.items.forEach(item => {
                 html += `
-            <div class="leaflet-panel-layers-item ${item.checked ? 'active' : ''}">
-              <label class="leaflet-panel-layers-title">
-                <input type="radio" class="leaflet-panel-layers-selector" name="${group.label.toLowerCase().replace(/\s+/g, '_')}[]" id="${item.value}" value="${item.value}" ${item.checked ? 'checked="true"' : ''}>
-                <span>${item.label}</span>
-              </label>
-            </div>
-          `;
+                    <div class="leaflet-panel-layers-item ${item.checked ? 'active' : ''}">
+                    <label class="leaflet-panel-layers-title">
+                        <input type="radio" class="leaflet-panel-layers-selector" name="${group.label.toLowerCase().replace(/\s+/g, '_')}[]" id="${item.value}" value="${item.value}" ${item.checked ? 'checked="true"' : ''}>
+                        <span>${item.label}</span>
+                    </label>
+                    </div>
+                `;
             });
 
             html += '</div>';
         });
 
         html += `
-            </div> <!-- Close leaflet-panel-layers-base -->
-          </form>
-        </div>
-      `;
+                    </div> <!-- Close leaflet-panel-layers-base -->
+                </form>
+                </div>
+            `;
 
-        return html;
+        final_html += html;
+        return final_html;
     },
 
     _addClickEvents: function (container) {
@@ -98,10 +87,13 @@ L.Control.SidebarLegend = L.Control.extend({
 
     // Find an item by its value in the options
     _findItemByValue: function (value) {
-        for (let group of this.options.groups) {
-            for (let item of group.items) {
-                if (item.value === value) {
-                    return item;
+        for (let this_grouping of this.options.groupings) {
+            console.log("this.options.grouping", this_grouping);
+            for (let group of this_grouping.groups) {
+                for (let item of group.items) {
+                    if (item.value === value) {
+                        return item;
+                    }
                 }
             }
         }
@@ -114,4 +106,3 @@ function addSidebarLegendToMap(map, options = {}) {
     map.addControl(sidebarLegend);
     return sidebarLegend;
 }
-

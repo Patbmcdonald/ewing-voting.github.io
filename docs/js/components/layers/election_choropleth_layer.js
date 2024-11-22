@@ -40,69 +40,11 @@ class ElectionMarginLayer {
         };
     }
 
-    generateCandiateTableHTML({
-        districtName,
-        candidates,
-        registeredVoters,
-        castedBallots,
-        turnoutPercentage,
-        marginInfo,
-        marginInfoColor
-    }) {
-        const resultsTableHTML = `
-            <div class="results-table">
-              <div class="results-header">${districtName}</div>
-          
-              <div class="table-header">
-                  <div class="candidate-name">Candidate</div>
-                  <div class="vote-count">Votes</div>
-                  <div class="percentage">%</div>
-              </div>
-          
-              ${candidates.map((candidate, index) => `
-                <div class="results-row candidate-row ${candidate.party.toLowerCase()} ${candidate.isWinner ? 'winner' : ''}" 
-                     data-index="${index}">
-                    <div class="candidate-name">${candidate.name}${candidate.isWinner ? ' ✓' : ''}</div>
-                    <div class="vote-count">${candidate.votes}</div>
-                    <div class="percentage">${candidate.percentage}%</div>
-                </div>
-              `).join('')}
-                <div class="results-row border_top">
-                    <div class="candidate-name"></div>
-                    <div class="vote-count"></div>
-                    <div class="margin-info ${marginInfoColor}">${marginInfo}</div>
-                </div>
-              <div class="vote-info">
-                  Registered Voters: ${registeredVoters} | 
-                  Casted Ballots: ${castedBallots} | 
-                  Turnout: ${turnoutPercentage}% 
-              </div>
-            </div>
-        `;
-
-        const template = document.createElement('div');
-        template.innerHTML = resultsTableHTML;
-
-        template.querySelectorAll('.candidate-row').forEach(row => {
-            const index = row.getAttribute('data-index');
-            const candidate = candidates[index];
-            if (candidate && typeof candidate.handler === 'function') {
-                row.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    candidate.handler(candidate);
-                });
-            }
-        });
-
-        return template.innerHTML;
-    }
-
-
     _onEachFeature(feature, layer) {
         var dataSet = this.electionData.getGroupedByPKey()
         var key = feature.properties[this.options.pk]
         var this_data = dataSet[key][0];
-        var year_key = this.options.year +"_";
+        var year_key = this.options.year + "_";
         var voteKeys = this.getVoteKeys(this_data, year_key);
 
         layer.setStyle({
@@ -118,13 +60,12 @@ class ElectionMarginLayer {
         });
 
         // Dynamically create candidates based on dataSet from ElectionData
-        const candidates = this.electionData.getCandidates().map(candidate => (
-            {
+        const candidates = this.electionData.getCandidates().map(candidate => ({
             name: candidate.name,
-            votes: this_data[year_key+candidate.dataKey + "_votes"],
-            percentage: this_data[year_key+candidate.dataKey + "_percent"],
+            votes: this_data[year_key + candidate.dataKey + "_votes"],
+            percentage: this_data[year_key + candidate.dataKey + "_percent"],
             party: candidate.party,
-            isWinner: Utils.checkAgainstMultipleKeys(this_data[year_key+candidate.dataKey + "_votes"], this_data, voteKeys),
+            isWinner: Utils.checkAgainstMultipleKeys(this_data[year_key + candidate.dataKey + "_votes"], this_data, voteKeys),
             handler: () => alert(`Displaying details for ${candidate.name}`)
         }));
 
@@ -133,17 +74,85 @@ class ElectionMarginLayer {
             marginInfoColor
         } = this.getMarginInfo(this_data, voteKeys);
 
+        const columns = [{
+                headerName: 'Candidate',
+                key: 'name',
+                className: 'candidate-name',
+                post_fix: '',
+            },
+            {
+                headerName: 'Votes',
+                key: 'votes',
+                className: 'vote-count',
+                post_fix: '',
+            },
+            {
+                headerName: '%',
+                key: 'percentage',
+                className: 'percentage',
+                post_fix: '%',
+            },
+        ];
+
         const tableOptions = {
-            districtName: `Ewing District ${feature.properties.ELECD_CODE}`,
-            candidates,
-            registeredVoters: this_data[this.options.registered_voters],
-            castedBallots: this_data[this.options.casted_ballots],
-            turnoutPercentage: this_data[this.options.turnout_percentage],
-            marginInfo: marginInfo,
-            marginInfoColor: marginInfoColor
+            title: `Ewing District ${feature.properties.ELECD_CODE}`,
+            columns: columns,
+            dynamicRows: [
+                {
+                    containerClass: 'results-row candidate-row',
+                    customRenderer: function (field) {
+                        return candidates.map((candidate, index) => `
+                    <div class="${field.containerClass} ${candidate.party.toLowerCase()} ${candidate.isWinner ? 'winner' : ''}" data-index="${index}">
+                    ${columns.map(column => `
+                        <div class="${column.className || ''}">
+                            ${candidate[column.key] + column.post_fix || ''}
+                            ${column.key === 'name' && candidate.isWinner ? ' ✓' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+                    }
+                },
+                {
+                    containerClass: 'results-row border_top',
+                    customRenderer: function (field) {
+                        return `
+                    <div class="${field.containerClass}">
+                        <div class="candidate-name"></div>
+                        <div class="vote-count"></div>
+                        <div class="margin-info ${marginInfoColor}">${marginInfo}</div>
+                    </div>
+                </div>`;
+                    }
+                },
+            ],
+            dynamicFields: [{
+                label: 'Margin Info',
+                containerClass: 'margin-info',
+                customRenderer: (field) => `
+                        Registered Voters: ${this_data[this.options.registered_voters]} | 
+                        Casted Ballots: ${this_data[this.options.casted_ballots]} | 
+                        Turnout: ${this_data[this.options.turnout_percentage]}% 
+                    `,
+            }],
+            post_process: function (template) {
+                template.querySelectorAll('.candidate-row').forEach(row => {
+                    const index = row.getAttribute('data-index');
+                    const candidate = candidates[index];
+                    if (candidate && typeof candidate.handler === 'function') {
+                        row.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            candidate.handler(candidate);
+                        });
+                    }
+                });
+
+                return template
+            }
         };
 
-        const resultsTableHTML = this.generateCandiateTableHTML(tableOptions);
+        const resultsTableHTML = Utils.createElectionResultTableHTML(tableOptions)
+
         layer.bindPopup(resultsTableHTML);
 
         layer.on("click", () => {
@@ -155,7 +164,9 @@ class ElectionMarginLayer {
         let $this = this;
         L.geoJSON(districtsGeoJSON, {
             style: $this.defaultStyle(),
-            onEachFeature: function(feature, layer) { $this._onEachFeature(feature, layer);}
+            onEachFeature: function (feature, layer) {
+                $this._onEachFeature(feature, layer);
+            }
         }).addTo(map);
     }
 

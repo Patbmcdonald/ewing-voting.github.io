@@ -30,4 +30,6 @@ class LegendControl {
     }
 }
 
-// Usage
+function addChartScaleLegendToMap(map, options = {}) {
+    return new LegendControl(map, options).addToMap();
+}

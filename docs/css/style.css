@@ -153,6 +153,9 @@ body {
   width: 365px;
 }
 
+.border_bottom{
+  border-bottom: 1px solid #ddd;
+}
 
 .margin-info.democrat,
 .percentage.democrat {
@@ -178,6 +181,9 @@ body {
   font-size: 12px;
 }
 
+.leaflet-panel-layers-border {
+  margin:3px;
+}
 
 .leaflet-popup-tip-container {
   display: none;

@@ -14,7 +14,7 @@ class MainApplication {
             turnout_percentage: "2022_turnout",
             year: "2022"
         });
-        this.ewing_mayor_race__2018 = new MayorMarginRaceLayer(electionMayorData,{
+        this.ewing_mayor_race__2018 = new MayorMarginRaceLayer(electionMayorData, {
             registered_voters: "2018_registered",
             casted_ballots: "2018_casted",
             marginValue: "2018_margin_of_win",
@@ -31,34 +31,62 @@ class MainApplication {
 
         this.map.addLayer(this.osmLayer);
         var $this = this;
-        this.currentSideBar = addSidebarLegendToMap(this.map, {
-            title: 'Elections',
-            groups: [{
-                label: 'Ewing Mayor Race',
-                items: [{
-                        label: '2022 Results',
-                        value: '2022',
-                        checked: true,
-                        handler: () => $this.rerender($this.ewing_mayor_race__2022, 'Ewing Mayor Race - 2022 Results')
-                    },
-                    {
-                        label: '2018 Results',
-                        value: '2018',
-                        checked: false,
-                        handler: () => $this.rerender($this.ewing_mayor_race__2018, 'Ewing Mayor Race - 2018 Results')
-                    },
-                    {
-                        label: '2018-2022 District Swing',
-                        value: 'swing',
-                        checked: false,
-                        handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing, 'Ewing Mayor Race - 2018-2022 District Swing')
-                    }
-                ]
-            }]
+        addSidebarLegendToMap(this.map, {
+            groupings: [{
+                    title: 'Elections',
+                    groups: [{
+                        label: 'Ewing Mayor Race',
+                        items: [{
+                                label: '2022 Results',
+                                value: '2022',
+                                checked: true,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2022, 'Ewing Mayor Race - 2022 Results')
+                            },
+                            {
+                                label: '2018 Results',
+                                value: '2018',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018, 'Ewing Mayor Race - 2018 Results')
+                            },
+                            {
+                                label: '2018-2022 District Swing',
+                                value: 'swing',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing, 'Ewing Mayor Race - 2018-2022 District Swing')
+                            }
+                        ]
+                    }]
+                },
+                {
+                    title: 'Electionds',
+                    groups: [{
+                        label: 'Ewing Mayor Racer',
+                        items: [{
+                                label: '2025 Results',
+                                value: '2025',
+                                checked: true,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2022, 'Ewing Mayor Race - 2022 Results')
+                            },
+                            {
+                                label: '2022 Results',
+                                value: '2022',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race__2018, 'Ewing Mayor Race - 2018 Results')
+                            },
+                            {
+                                label: '2018-2022 District Swing',
+                                value: 'swing',
+                                checked: false,
+                                handler: () => $this.rerender($this.ewing_mayor_race_2018_2022_swing, 'Ewing Mayor Race - 2018-2022 District Swing')
+                            }
+                        ]
+                    }]
+                }
+            ]
         });
 
-        new LegendControl(this.map, Constants.marginScaleThresholds).addToMap();
-        this.header_text.setText('Ewing Mayor Race - 2022 Results');
+
+        addChartScaleLegendToMap(this.map, Constants.marginScaleThresholds)
         this.render_layer(this.current_layer);
     }
 
@@ -68,8 +96,6 @@ class MainApplication {
             $this.map.removeLayer(layer);
         });
         this.map.addLayer(this.osmLayer);
-        
-        this.header_text.setText(title);
         this.render_layer(new_layer);
 
     }
@@ -87,6 +113,6 @@ class MainApplication {
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     main_app = new MainApplication("app");
 })
